@@ -1,0 +1,20 @@
+PAK Skin Editor Tool
+
+Developed by: @m3b1x
+
+Telegram: https://t.me/m3b1x
+
+لاستخدام الأداة يرجى عدم حذف حقوق المطور
+
+import os import subprocess from PIL import Image, ImageEnhance
+
+def extract_pak(pak_file, output_folder): if not os.path.exists(output_folder): os.makedirs(output_folder) command = f"quickbms.exe script.bms {pak_file} {output_folder}" subprocess.run(command, shell=True) print(f"Extracted: {pak_file} -> {output_folder}")
+
+def modify_skins(folder): for root, _, files in os.walk(folder): for file in files: if file.endswith(".png") or file.endswith(".dds"): file_path = os.path.join(root, file) print(f"Modifying skin: {file_path}") try: img = Image.open(file_path).convert("RGBA") enhancer = ImageEnhance.Color(img) img = enhancer.enhance(1.5)  # زيادة تشبع الألوان img.save(file_path) print(f"Color adjusted: {file_path}") except Exception as e: print(f"Error modifying {file_path}: {e}")
+
+def repack_pak(input_folder, output_pak): command = f"quickbms.exe -w script.bms {input_folder} {output_pak}" subprocess.run(command, shell=True) print(f"Repacked: {input_folder} -> {output_pak}")
+
+def main(): print("\033[34mPAK Skin Editor Tool - Developed by @m3b1x\033[0m") choice = input("1- Extract PAK\n2- Modify Skins\n3- Repack PAK\nChoose: ") if choice == '1': pak_file = input("Enter PAK file path: ") output_folder = input("Enter output folder: ") extract_pak(pak_file, output_folder) elif choice == '2': folder = input("Enter extracted folder path: ") modify_skins(folder) elif choice == '3': input_folder = input("Enter folder to pack: ") output_pak = input("Enter output PAK file path: ") repack_pak(input_folder, output_pak) else: print("Invalid choice!")
+
+if name == "main": main()
+
